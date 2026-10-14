@@ -14,3 +14,18 @@ test('記事を作成できる', function () {
     // ３．DBに本当に保存されたか確認する
     $this->assertDatabaseHas('articles', ['title' => '最初の記事']);
 });
+
+test('タイトルがないと422になる', function () {
+    $this->postJson('/api/articles', ['body' => '本文です'])
+        ->assertUnprocessable()                  // 422
+        ->assertJsonValidationErrors(['title']); // errors に title がある
+});
+
+test('タイトルが256文字だと422になる', function () {
+    $this->postJson('/api/articles', [
+        'title' => str_repeat('あ', 256),
+        'body'  => '本文です',
+    ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['title']);
+});
