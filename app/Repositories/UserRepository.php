@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Laravel\Sanctum\PersonalAccessToken;
 use Override;
 
 class UserRepository implements UserRepositoryInterface
@@ -23,5 +24,15 @@ class UserRepository implements UserRepositoryInterface
     public function findByEmail(string $email): ?User
     {
         return User::where('email', $email)->first();
+    }
+
+    #[Override]
+    public function deleteToken(User $user): void
+    {
+        $token=$user->currentAccessToken();
+
+        if($token instanceof PersonalAccessToken){
+            $token->delete();
+        }
     }
 }

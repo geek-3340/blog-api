@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -36,5 +37,10 @@ class AuthService
         $token = $this->users->createToken($user, 'auth_token');
 
         return ['user' => $user, 'token' => $token];
+    }
+
+    public function logout(User $user): void
+    {
+        $this->users->deleteToken($user);
     }
 }
