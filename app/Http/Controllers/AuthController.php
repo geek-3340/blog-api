@@ -37,4 +37,11 @@ class AuthController extends Controller
     {
         return new UserResource($request->user());
     }
+    
+    public function logout(Request $request, AuthService $authService): JsonResponse
+    {
+        $authService->logout($request->user());
+        
+        return response()->noContent();
+    }
 }
