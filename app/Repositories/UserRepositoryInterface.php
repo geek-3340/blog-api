@@ -10,5 +10,7 @@ interface UserRepositoryInterface
 
     public function createToken(User $user, string $tokenName): string;
 
-    public function findByEmail(string $email):?User;
+    public function findByEmail(string $email): ?User;
+
+    public function deleteToken(User $user): void;
 }

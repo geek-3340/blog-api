@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
@@ -37,11 +38,11 @@ class AuthController extends Controller
     {
         return new UserResource($request->user());
     }
-    
-    public function logout(Request $request, AuthService $authService): JsonResponse
+
+    public function logout(Request $request, AuthService $authService): Response
     {
         $authService->logout($request->user());
-        
+
         return response()->noContent();
     }
 }
