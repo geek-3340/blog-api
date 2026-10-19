@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -24,11 +25,16 @@ class AuthController extends Controller
     {
         $result = $authService->login($request->validated());
 
-            return $result
+        return $result
             ? response()->json([
                 'user' => new UserResource($result['user']),
                 'token' => $result['token'],
             ], 200)
             : response()->json(['message' => 'メールアドレスまたはパスワードが正しくありません'], 401);
+    }
+
+    public function me(Request $request): UserResource
+    {
+        return new UserResource($request->user());
     }
 }
