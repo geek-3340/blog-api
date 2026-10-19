@@ -18,4 +18,10 @@ class UserRepository implements UserRepositoryInterface
     {
         return $user->createToken($tokenName)->plainTextToken;
     }
+
+    #[Override]
+    public function findByEmail(string $email): ?User
+    {
+        return User::where('email', $email)->first();
+    }
 }
