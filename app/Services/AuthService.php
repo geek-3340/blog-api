@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
@@ -22,5 +23,18 @@ class AuthService
 
             return ['user' => $user, 'token' => $token];
         });
+    }
+
+    public function login(array $data): ?array
+    {
+        $user = $this->users->findByEmail($data['email']);
+
+        if (! $user || ! Hash::check($data['password'], $user->password)) {
+            return null;
+        }
+
+        $token = $this->users->createToken($user, 'auth_token');
+
+        return ['user' => $user, 'token' => $token];
     }
 }

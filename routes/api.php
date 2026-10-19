@@ -12,3 +12,5 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('articles',ArticleController::class)->only(['store']);
 
 Route::post('/register',[AuthController::class,'register']);
+
+Route::post('/login',[AuthController::class,'login']);
