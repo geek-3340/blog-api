@@ -11,7 +11,7 @@ class ArticleController extends Controller
 {
     public function __construct(
         private ArticleService $articleService,
-    ){}
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -24,8 +24,10 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreArticleRequest $request):ArticleResource{
-        $article=$this->articleService->create($request->validated());
+    public function store(StoreArticleRequest $request): ArticleResource
+    {
+        $user = $request->user();
+        $article = $this->articleService->create($request->validated(), $user);
         return new ArticleResource($article);
     }
 

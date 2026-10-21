@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Article;
+use App\Models\User;
 use App\Repositories\ArticleRepositoryInterface;
 
 class ArticleService
@@ -11,8 +12,8 @@ class ArticleService
         private ArticleRepositoryInterface $articleRepository,
     ) {}
 
-    public function create(array $data): Article
+    public function create(array $data, User $user): Article
     {
-        return $this->articleRepository->create($data);
+        return $this->articleRepository->create($data, $user);
     }
 }
