@@ -13,4 +13,18 @@ class ArticleRepository implements ArticleRepositoryInterface
     {
         return $user->articles()->create($data);
     }
+
+    #[Override]
+    public function update(Article $article, array $data): Article
+    {
+        $article->update($data);
+
+        return $article;
+    }
+
+    #[Override]
+    public function delete(Article $article): void
+    {
+        $article->delete();
+    }
 }

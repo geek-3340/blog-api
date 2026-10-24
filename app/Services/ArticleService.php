@@ -16,4 +16,14 @@ class ArticleService
     {
         return $this->articleRepository->create($data, $user);
     }
+
+    public function update(Article $article, array $data): Article
+    {
+        return $this->articleRepository->update($article, $data);
+    }
+
+    public function delete(Article $article): void
+    {
+        $this->articleRepository->delete($article);
+    }
 }
