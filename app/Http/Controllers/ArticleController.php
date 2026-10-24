@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleResource;
+use App\Models\Article;
 use App\Services\ArticleService;
 use Illuminate\Http\Request;
 
@@ -42,16 +44,17 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Article $article, UpdateArticleRequest $request)
     {
-        //
+        $article = $this->articleService->update($article, $request->validated());
+        return new ArticleResource($article);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Article $article)
     {
-        //
+        $this->articleService->delete($article);
     }
 }
