@@ -51,14 +51,30 @@ test('titleが256文字だと422になる', function () {
 
 test('未ログインだと401が返る', function () {
     $user = User::factory()->create();
-    $article = Article::factory()->for($user)->create(['title' => '古いタイトル']);
+    $article = Article::factory()->for($user)->create();
 
     $response = $this->putJson("/api/articles/{$article->id}", [
         'title' => '新しいタイトル',
-        'body' => '新しい本文',
     ]);
 
     $response->assertUnauthorized();
 });
+
+// ========================================================================================
+
+test(
+    '他人の記事を更新しようとすると403が返り、DBの記事は変わっていない',
+    function () {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $article = Article::factory()->for($user)->create();
+
+        $response = $this->actingAs($user2)->putJson("/api/articles/{$article->id}", [
+            'title' => '新しいタイトル',
+        ]);
+
+        $response->assertForbidden();
+    }
+);
 
 // ========================================================================================
