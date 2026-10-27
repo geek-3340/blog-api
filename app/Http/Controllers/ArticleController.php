@@ -56,5 +56,6 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         $this->articleService->delete($article);
+        return response()->noContent();
     }
 }
