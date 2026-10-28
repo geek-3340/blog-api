@@ -67,13 +67,43 @@ test(
     function () {
         $user = User::factory()->create();
         $user2 = User::factory()->create();
-        $article = Article::factory()->for($user)->create();
+        $article = Article::factory()->for($user)->create(['title' => '古いタイトル']);
+
 
         $response = $this->actingAs($user2)->putJson("/api/articles/{$article->id}", [
             'title' => '新しいタイトル',
         ]);
 
         $response->assertForbidden();
+
+        $this->assertDatabaseHas('articles', [
+            'id' => $article->id,
+            'title' => '古いタイトル'
+        ]);
+    }
+);
+
+// ========================================================================================
+
+test(
+    '他人の記事をtitle256文字で更新しようとすると403が返り、DBの記事は変わっていない',
+    function () {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $article = Article::factory()->for($user)->create(['title' => '古いタイトル']);
+
+
+        $response = $this->actingAs($user2)->putJson("/api/articles/{$article->id}", [
+            'title' => str_repeat('あ', 256),
+            'body' => '新しい本文',
+        ]);
+
+        $response->assertForbidden();
+
+        $this->assertDatabaseHas('articles', [
+            'id' => $article->id,
+            'title' => '古いタイトル'
+        ]);
     }
 );
 

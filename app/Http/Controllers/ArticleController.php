@@ -8,6 +8,8 @@ use App\Http\Resources\ArticleResource;
 use App\Models\Article;
 use App\Services\ArticleService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class ArticleController extends Controller
 {
@@ -44,7 +46,7 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Article $article, UpdateArticleRequest $request)
+    public function update(Article $article, UpdateArticleRequest $request): ArticleResource
     {
         $article = $this->articleService->update($article, $request->validated());
         return new ArticleResource($article);
@@ -53,8 +55,9 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Article $article)
+    public function destroy(Article $article): Response
     {
+        Gate::authorize('delete', $article);
         $this->articleService->delete($article);
         return response()->noContent();
     }
